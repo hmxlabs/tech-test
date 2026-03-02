@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 project(TechTest)
 
 # Default to C++17, but candidates may change to 20 or 23 if preferred
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# regenerate the compile-commands.json every time
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Models library
 # Make Models a static library so translation-unit implementations
@@ -13,6 +18,13 @@ add_library(Models STATIC
 
 target_include_directories(Models PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+
+add_library(third-party STATIC
+    third-party/pugixml.cpp
+)
+
+target_include_directories(third-party PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
+
 # Loaders library
 add_library(Loaders
     Loaders/ITradeLoader.h
@@ -20,6 +32,7 @@ add_library(Loaders
     Loaders/BondTradeLoader.cpp
     Loaders/FxTradeLoader.h
     Loaders/FxTradeLoader.cpp
+    Loaders/LoaderUtils.h
 )
 
 target_include_directories(Loaders PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -53,10 +66,12 @@ add_library(RiskSystem
     RiskSystem/ParallelPricer.cpp
     RiskSystem/ScreenResultPrinter.h
     RiskSystem/ScreenResultPrinter.cpp
+
+    RiskSystem/NameResolver.h
 )
 
 target_include_directories(RiskSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(RiskSystem Models Loaders Pricers)
+target_link_libraries(RiskSystem Models Loaders Pricers third-party)
 
 # Find and link threading library (required for Exercise 8)
 find_package(Threads REQUIRED)

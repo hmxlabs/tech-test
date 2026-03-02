@@ -1,8 +1,9 @@
 #ifndef PRICINGENGINECONFIG_H
 #define PRICINGENGINECONFIG_H
 
-#include "PricingEngineConfigItem.h"
 #include <vector>
+
+#include "PricingEngineConfigItem.h"
 
 class PricingEngineConfig : public std::vector<PricingEngineConfigItem> {
 public:
@@ -10,4 +11,3 @@ public:
 };
 
 #endif // PRICINGENGINECONFIG_H
-

@@ -9,4 +9,3 @@ public:
 };
 
 #endif // BONDTRADELIST_H
-

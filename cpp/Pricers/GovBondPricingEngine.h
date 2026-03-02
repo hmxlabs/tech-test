@@ -5,11 +5,11 @@
 
 class GovBondPricingEngine : public BasePricingEngine {
 public:
-    GovBondPricingEngine() {
+    GovBondPricingEngine()
+    {
         setDelay(5000);
         addSupportedTradeType("GovBond");
     }
 };
 
 #endif // GOVBONDPRICINGENGINE_H
-

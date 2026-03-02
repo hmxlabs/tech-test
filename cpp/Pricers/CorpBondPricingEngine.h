@@ -5,11 +5,11 @@
 
 class CorpBondPricingEngine : public BasePricingEngine {
 public:
-    CorpBondPricingEngine() {
+    CorpBondPricingEngine()
+    {
         setDelay(8000);
         addSupportedTradeType("CorpBond");
     }
 };
 
 #endif // CORPBONDPRICINGENGINE_H
-
