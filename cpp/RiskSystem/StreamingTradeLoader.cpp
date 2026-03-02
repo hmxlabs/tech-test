@@ -48,28 +48,23 @@ void StreamingTradeLoader::loadAndPrice(IScalarResultReceiver* resultReceiver)
     loadPricers();
     std::vector<std::unique_ptr<ITradeLoader>> loaders = getTradeLoaders();
 
+    // TODO: maybe we could allow this method to receive a pricer
+    // (Parallel vs Serial)
     for (const auto& loader : loaders) {
-        std::cout << "loader" << '\n';
-        // ERROR:
-        // // WRONG:  can't store trades in a variable
-        // auto trades = loader->loadTrades();
 
-        loader->streamTrades(
+        loader->streamTrades([this, resultReceiver](const ITrade& trade) {
+            const std::string& tradeType = trade.getTradeType();
 
-            [this, resultReceiver](const ITrade& trade) {
-                const std::string& tradeType = trade.getTradeType();
-
-                auto it = this->pricers_.find(tradeType);
-                if (it == this->pricers_.end()) {
-                    std::cerr
-                        << "No pricer was found for tradeType: " << tradeType
-                        << '\n';
-                    return;
-                }
-
-                IPricingEngine* pricer = it->second.get();
-                pricer->price(&trade, resultReceiver);
+            auto it = this->pricers_.find(tradeType);
+            if (it == this->pricers_.end()) {
+                std::cerr << "No pricer was found for tradeType: " << tradeType
+                          << '\n';
+                return;
             }
+
+            IPricingEngine* pricer = it->second.get();
+            pricer->price(&trade, resultReceiver);
+        }
 
         );
     }

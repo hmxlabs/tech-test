@@ -22,6 +22,8 @@ public:
     virtual void addError(
         const std::string& tradeId, const std::string& error) override;
 
+    // virtual void combineWith(ScalarResults other);
+
     class Iterator {
     public:
         using ResultIter = std::map<std::string, double>::const_iterator;

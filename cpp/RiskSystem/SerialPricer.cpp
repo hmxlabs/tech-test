@@ -43,13 +43,14 @@ void SerialPricer::price(
     for (const auto& tradeContainer : tradeContainers) {
         for (ITrade* trade : tradeContainer) {
             std::string tradeType = trade->getTradeType();
-            if (pricers_.find(tradeType) == pricers_.end()) {
+            auto entry = pricers_.find(trade->getTradeType());
+            if (entry == pricers_.end()) {
                 resultReceiver->addError(trade->getTradeId(),
                     "No Pricing Engines available for this trade type");
                 continue;
             }
 
-            IPricingEngine* pricer = pricers_[tradeType].get();
+            IPricingEngine* pricer = entry->second.get();
             pricer->price(trade, resultReceiver);
         }
     }
