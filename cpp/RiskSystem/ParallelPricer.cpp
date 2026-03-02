@@ -28,64 +28,61 @@ void ParallelPricer::loadPricers()
     }
 }
 
+#define MAX_WORKERS 8
+
 void ParallelPricer::price(
     const std::vector<std::vector<ITrade*>>& tradeContainers,
     IScalarResultReceiver* resultReceiver)
 {
-
     loadPricers();
 
+    // turn it into a flat vector of trades
+    std::vector<ITrade*> trades;
+    for (const auto& container : tradeContainers) {
+        trades.insert(trades.end(), container.begin(), container.end());
+    }
+
+    std::counting_semaphore<MAX_WORKERS> sem(MAX_WORKERS);
     std::vector<std::thread> handles;
 
-    for (const auto& tradeContainer : tradeContainers) {
-        std::cout << "starting a thread" << '\n';
+    for (ITrade* trade : trades) {
+        sem.acquire();
 
-        handles.emplace_back([this, &tradeContainer, resultReceiver]() {
-            // std::vector<std::pair<std::string, double>> localThreadResults;
-            // WARN: I chose ScalarResults to be the concrete container type for
-            // this, but it may potentially lose information if another data
-            // structure gets introduced and allows duplicate tradeIDs (for
-            // whatever reason),
-            //
-            // IScalarResultReciever could have been chosen here, but it would
-            // involve drastically changing the abstract class definition
-            ScalarResults localResults;
-
-            for (ITrade* trade : tradeContainer) {
-                std::string tradeType = trade->getTradeType();
-                auto entry = pricers_.find(trade->getTradeType());
-                if (entry == pricers_.end()) {
-                    resultReceiver->addError(trade->getTradeId(),
-                        "No Pricing Engines available for this trade type");
-                    continue;
-                }
-
-                IPricingEngine* pricer = entry->second.get();
-                pricer->price(trade, &localResults);
-            }
-            // acquire/lock mutex one time per thread
-            {
+        handles.emplace_back([this, trade, resultReceiver, &sem]() {
+            std::string tradeType = trade->getTradeType();
+            auto it = pricers_.find(tradeType);
+            if (it == pricers_.end()) {
                 std::lock_guard<std::mutex> lock(resultMutex_);
-                for (const auto& result : localResults) {
-                    std::string tradeId = result.getTradeId();
-                    std::optional<double> tradeResult = result.getResult();
-                    std::optional<std::string> tradeError = result.getError();
+                resultReceiver->addError(trade->getTradeId(),
+                    "No Pricing Engines available for this trade type");
+            } else {
+                IPricingEngine* pricer = it->second.get();
+                ScalarResults result = {};
+                pricer->price(trade, &result);
+                {
+                    std::lock_guard<std::mutex> lock(resultMutex_);
 
-                    if (tradeResult) {
-                        resultReceiver->addResult(tradeId, tradeResult.value());
+                    for (const auto& res : result) {
+                        auto r = res.getResult();
+                        if (r) {
+                            resultReceiver->addResult(
+                                trade->getTradeId(), r.value());
+                        }
+
+                        auto e = res.getError();
+                        if (e) {
+                            resultReceiver->addError(
+                                trade->getTradeId(), e.value());
+                        }
                     }
-                    if (tradeError) {
-                        resultReceiver->addError(tradeId, tradeError.value());
-                    }
-                    // std::string result = result.();
-                    // std::string error = result.getTradeId();
-                    // resultReceiver.
                 }
-                // multiple localResults combined to one
             }
+            sem.release();
         });
     }
-    for (auto& handle : handles) {
-        handle.join();
-    };
+
+    // Join all threads
+    for (auto& t : handles) {
+        t.join();
+    }
 }
