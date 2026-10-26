@@ -18,14 +18,14 @@ class PricingConfigLoaderTests(unittest.TestCase):
         config_item = self.config[0]
 
         self.assertEqual(config_item.trade_type, BondTrade.GOV_BOND_TRADE_TYPE)
-        self.assertEqual(config_item.type_name, "techtest.pricers.GovBondPricingEngine")
-        self.assertEqual(config_item.assembly, "techtest.pricers")
+        self.assertEqual(config_item.class_name, "GovBondPricingEngine")
+        self.assertEqual(config_item.module, "techtest.pricers")
 
     def test_last_config_mapping(self):
         config_item = self.config[3]
         self.assertEqual(config_item.trade_type, FxTrade.FX_FORWARD_TRADE_TYPE)
-        self.assertEqual(config_item.type_name, "techtest.pricers.FxPricingEngine")
-        self.assertEqual(config_item.assembly, "techtest.pricers")
+        self.assertEqual(config_item.class_name, "FxPricingEngine")
+        self.assertEqual(config_item.module, "techtest.pricers")
 
 
 if __name__ == "__main__":

@@ -15,8 +15,6 @@ def main() -> None:
     screen_printer = ScreenResultPrinter()
     screen_printer.print_results(results)
 
-    input("Press Enter to exit..")
-
 
 if __name__ == "__main__":
     main()

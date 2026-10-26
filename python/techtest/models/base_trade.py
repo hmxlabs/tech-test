@@ -2,20 +2,19 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from datetime import datetime
-from typing import Optional
 
-from techtest.models.i_trade import ITrade
+from techtest.models.trade import Trade
 
 
-class BaseTrade(ITrade):
+class BaseTrade(Trade):
     def __init__(self) -> None:
         self.trade_date: datetime = datetime.min
-        self.counterparty: Optional[str] = None
-        self.instrument: Optional[str] = None
+        self.counterparty: str | None = None
+        self.instrument: str | None = None
         self.notional: float = 0.0
         self.rate: float = 0.0
-        # Set by subclasses (the C# setter is protected)
-        self._trade_id: Optional[str] = None
+        # Set by subclasses
+        self._trade_id: str | None = None
 
     @property
     @abstractmethod
@@ -23,5 +22,5 @@ class BaseTrade(ITrade):
         ...
 
     @property
-    def trade_id(self) -> Optional[str]:
+    def trade_id(self) -> str | None:
         return self._trade_id

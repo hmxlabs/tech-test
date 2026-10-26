@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import os
-from typing import Dict, Iterable
+from typing import Iterable
 
-from techtest.models import IPricingEngine, IScalarResultReceiver, ITrade
+from techtest.models import PricingEngine, ResultReceiver, Trade
 from techtest.risk_system.pricing_config_loader import PricingConfigLoader
 
 
 class SerialPricer:
     def __init__(self) -> None:
-        self._pricers: Dict[str, IPricingEngine] = {}
+        self._pricers: dict[str, PricingEngine] = {}
 
-    def price(self, trade_containers: Iterable[Iterable[ITrade]], result_receiver: IScalarResultReceiver) -> None:
+    def price(self, trade_containers: Iterable[Iterable[Trade]], result_receiver: ResultReceiver) -> None:
         self._load_pricers()
 
         for trade_container in trade_containers:

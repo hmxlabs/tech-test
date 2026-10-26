@@ -7,7 +7,7 @@ from techtest.risk_system.screen_result_printer import ScreenResultPrinter
 from techtest.risk_system.serial_pricer import SerialPricer
 from techtest.risk_system.serial_trade_loader import SerialTradeLoader
 
-# The pricing engine configuration that ships with the risk system (C# copies it to the output folder instead)
+# The pricing engine configuration that ships with the risk system
 PRICING_CONFIG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pricing_config")
 
 __all__ = [

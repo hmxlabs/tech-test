@@ -8,8 +8,7 @@ from techtest.models import FxTrade, TradeList
 
 class FxTradeLoaderTests(unittest.TestCase):
     def setUp(self):
-        loader = FxTradeLoader()
-        loader.data_file = os.path.join(TRADE_DATA_DIR, "FxTrades.dat")
+        loader = FxTradeLoader(os.path.join(TRADE_DATA_DIR, "FxTrades.dat"))
         trades = loader.load_trades()
         self.trade_list = TradeList(trades)
 

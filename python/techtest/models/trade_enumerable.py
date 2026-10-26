@@ -3,10 +3,10 @@ from __future__ import annotations
 from abc import ABC
 from typing import Generic, Iterable, TypeVar
 
-from techtest.models.i_trade import ITrade
+from techtest.models.trade import Trade
 
-T = TypeVar("T", bound=ITrade)
+T = TypeVar("T", bound=Trade)
 
 
-class ITradeEnumerable(Iterable[T], Generic[T], ABC):
+class TradeEnumerable(Iterable[T], Generic[T], ABC):
     """An iterable of trades of type T."""

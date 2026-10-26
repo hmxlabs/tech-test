@@ -47,20 +47,20 @@ class ScalarResultsTests(unittest.TestCase):
     def test_contains_positive(self):
         results = ScalarResults()
         results.add_error(DUMMY_TRADE_ID_ONE, DUMMY_ERROR_ONE)
-        self.assertTrue(results.contains_trade(DUMMY_TRADE_ID_ONE))
+        self.assertIn(DUMMY_TRADE_ID_ONE, results)
 
         results = ScalarResults()
         results.add_result(DUMMY_TRADE_ID_ONE, DUMMY_RESULT_ONE)
-        self.assertTrue(results.contains_trade(DUMMY_TRADE_ID_ONE))
+        self.assertIn(DUMMY_TRADE_ID_ONE, results)
 
     def test_contains_negative(self):
         results = ScalarResults()
         results.add_error(DUMMY_TRADE_ID_ONE, DUMMY_ERROR_ONE)
-        self.assertFalse(results.contains_trade(DUMMY_TRADE_ID_TWO))
+        self.assertNotIn(DUMMY_TRADE_ID_TWO, results)
 
         results = ScalarResults()
         results.add_result(DUMMY_TRADE_ID_ONE, DUMMY_RESULT_TWO)
-        self.assertFalse(results.contains_trade(DUMMY_TRADE_ID_TWO))
+        self.assertNotIn(DUMMY_TRADE_ID_TWO, results)
 
     def test_enumeration(self):
         results = ScalarResults()

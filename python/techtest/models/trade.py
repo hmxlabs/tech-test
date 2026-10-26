@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Optional
 
 
-class ITrade(ABC):
+class Trade(ABC):
     """A trade. trade_date, instrument, counterparty, notional and rate are read/write attributes."""
 
     trade_date: datetime
-    instrument: Optional[str]
-    counterparty: Optional[str]
+    instrument: str | None
+    counterparty: str | None
     notional: float
     rate: float
 

@@ -2,22 +2,21 @@ from __future__ import annotations
 
 import random
 import time
-from typing import Dict
 
-from techtest.models import IPricingEngine, IScalarResultReceiver, ITrade
+from techtest.models import PricingEngine, ResultReceiver, Trade
 
 
-class BasePricingEngine(IPricingEngine):
-    _TRADES_TO_ERROR: Dict[str, str] = {"GOV006": "Undefined error in pricing"}
-    _TRADES_TO_WARN: Dict[str, str] = {"FWD001": "Unable to calibrate model to value date"}
+class BasePricingEngine(PricingEngine):
+    _TRADES_TO_ERROR: dict[str, str] = {"GOV006": "Undefined error in pricing"}
+    _TRADES_TO_WARN: dict[str, str] = {"FWD001": "Unable to calibrate model to value date"}
 
     def __init__(self) -> None:
-        self._supported_types: Dict[str, int] = {}
+        self._supported_types: dict[str, int] = {}
         self._random = random.Random()
         # Time taken to price a trade, in milliseconds
         self.delay = 5000
 
-    def price(self, trade: ITrade, result_receiver: IScalarResultReceiver) -> None:
+    def price(self, trade: Trade, result_receiver: ResultReceiver) -> None:
         if result_receiver is None:
             raise ValueError("result_receiver must not be None")
 
@@ -34,7 +33,7 @@ class BasePricingEngine(IPricingEngine):
             raise ValueError("Trade type " + trade_type + " has already been added")
         self._supported_types[trade_type] = 0
 
-    def _price_trade(self, trade: ITrade, result_receiver: IScalarResultReceiver) -> None:
+    def _price_trade(self, trade: Trade, result_receiver: ResultReceiver) -> None:
         if not self.is_trade_type_supported(trade.trade_type):
             if trade.trade_id is None:
                 raise ValueError("Trade does not have a valid ID")

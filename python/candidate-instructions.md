@@ -34,7 +34,7 @@ Implement the [FxTradeLoader](./techtest/loaders/fx_trade_loader.py) class so th
 Implement the [PricingConfigLoader](./techtest/risk_system/pricing_config_loader.py) class such that it loads the contents of the [PricingEngines.xml](./techtest/risk_system/pricing_config/PricingEngines.xml) file and provides an enumeration of PricingEngineConfigItem objects. Once this is implemented the PricingConfigLoaderTests should all pass.
 
 ## Exercise 4
-Implement the `_load_pricers` method in the [SerialPricer](./techtest/risk_system/serial_pricer.py) class so that it instantiates each of the required types of pricing engines dynamically. There should be no import-time dependency between the `risk_system` and `pricers` packages: nothing in `techtest.risk_system` should import `techtest.pricers` directly.
+Implement the `_load_pricers` method in the [SerialPricer](./techtest/risk_system/serial_pricer.py) class so that it instantiates each of the required types of pricing engines dynamically. There should be no import-time dependency between the `risk_system` and `pricers` packages.
 
 ## Exercise 5
 Complete the implementation of the [ScalarResults](./techtest/models/scalar_results.py) class such that it fully supports iteration (`__iter__`), producing one `ScalarResult` per trade. Once this is complete the ScalarResultsTests should all pass.

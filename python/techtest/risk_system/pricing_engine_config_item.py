@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Optional
+from dataclasses import dataclass
 
 
+@dataclass
 class PricingEngineConfigItem:
-    def __init__(self) -> None:
-        self.trade_type: Optional[str] = None
-        # The module the pricing engine lives in (the C# version names a .NET assembly)
-        self.assembly: Optional[str] = None
-        # The pricing engine class's full name, e.g. "techtest.pricers.GovBondPricingEngine"
-        self.type_name: Optional[str] = None
+    trade_type: str
+    # The module the pricing engine lives in, e.g. "techtest.pricers"
+    module: str
+    # The pricing engine's class name within that module, e.g. "GovBondPricingEngine"
+    class_name: str

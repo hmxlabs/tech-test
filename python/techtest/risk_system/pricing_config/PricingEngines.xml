@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PricingEngines>
-  <Engine tradeType="GovBond" assembly="techtest.pricers" pricingEngine="techtest.pricers.GovBondPricingEngine" />
-  <Engine tradeType="CorpBond" assembly="techtest.pricers" pricingEngine="techtest.pricers.CorpBondPricingEngine" />
-  <Engine tradeType="FxSpot" assembly="techtest.pricers" pricingEngine="techtest.pricers.FxPricingEngine" />
-  <Engine tradeType="FxFwd" assembly="techtest.pricers" pricingEngine="techtest.pricers.FxPricingEngine" />
+  <Engine tradeType="GovBond" module="techtest.pricers" class="GovBondPricingEngine" />
+  <Engine tradeType="CorpBond" module="techtest.pricers" class="CorpBondPricingEngine" />
+  <Engine tradeType="FxSpot" module="techtest.pricers" class="FxPricingEngine" />
+  <Engine tradeType="FxFwd" module="techtest.pricers" class="FxPricingEngine" />
 </PricingEngines>

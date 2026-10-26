@@ -8,8 +8,7 @@ from techtest.models import BondTrade, TradeList
 
 class BondTradeLoaderTests(unittest.TestCase):
     def setUp(self):
-        loader = BondTradeLoader()
-        loader.data_file = os.path.join(TRADE_DATA_DIR, "BondTrades.dat")
+        loader = BondTradeLoader(os.path.join(TRADE_DATA_DIR, "BondTrades.dat"))
         trades = loader.load_trades()
         self.trade_list = TradeList(trades)
 

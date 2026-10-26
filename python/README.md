@@ -1,6 +1,6 @@
 # Risk system tech test (Python)
 
-A Python port of the [C# tech test](../c-sharp). The exercises are in [candidate-instructions.md](./candidate-instructions.md).
+The exercises are in [candidate-instructions.md](./candidate-instructions.md).
 
 ## Requirements
 
@@ -23,19 +23,3 @@ From this folder:
 ```
 python3 -m techtest.console_app
 ```
-
-## Layout
-
-Each C# project is a package under `techtest`:
-
-| C# project | Python package |
-|---|---|
-| Models | `techtest/models` |
-| Loaders (and `TradeData`) | `techtest/loaders` (and `trade_data`) |
-| Pricers | `techtest/pricers` |
-| RiskSystem (and `PricingConfig`) | `techtest/risk_system` (and `pricing_config`) |
-| ConsoleApp | `techtest/console_app` |
-| Tests | `tests` |
-
-Class names match the C# version, including the `I...` interfaces, which are abstract base classes. Methods and
-properties use Python naming, e.g. `LoadTrades()` is `load_trades()` and `TradeDate` is `trade_date`.
