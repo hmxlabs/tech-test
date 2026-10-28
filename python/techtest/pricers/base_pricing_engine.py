@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import random
+import hashlib
 import time
+from datetime import date
 
 from techtest.models import PricingEngine, ResultReceiver, Trade
 
@@ -12,7 +13,8 @@ class BasePricingEngine(PricingEngine):
 
     def __init__(self) -> None:
         self._supported_types: dict[str, int] = {}
-        self._random = random.Random()
+        # The desk starts a fresh mark for each instrument on each trade date.
+        self._last_calculated: dict[tuple[date, str], float] = {}
         # Time taken to price a trade, in milliseconds
         self.delay = 5000
 
@@ -43,7 +45,7 @@ class BasePricingEngine(PricingEngine):
 
         print("Started pricing trade: " + str(trade.trade_id))
         time.sleep(self.delay / 1000)
-        result = self._calculate_result()
+        result = self._calculate_result(trade)
 
         if trade.trade_id in self._TRADES_TO_ERROR:
             result_receiver.add_error(trade.trade_id, self._TRADES_TO_ERROR[trade.trade_id])
@@ -54,5 +56,10 @@ class BasePricingEngine(PricingEngine):
 
         print("Completed pricing trade: " + str(trade.trade_id))
 
-    def _calculate_result(self) -> float:
-        return self._random.random() * 100
+    def _calculate_result(self, trade: Trade) -> float:
+        session = (trade.trade_date.date(), str(trade.instrument))
+        digest = hashlib.sha256(str(trade.trade_id).encode("utf-8")).digest()
+        base = (int.from_bytes(digest[:4], "big") % 10000) / 100
+        result = round(base + self._last_calculated.get(session, 0.0) * 0.07, 8)
+        self._last_calculated[session] = result
+        return result

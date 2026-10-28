@@ -49,3 +49,12 @@ At this point you should be able to run the application (`python -m techtest.con
 
 ## Exercise 7
 The risk system in its state as provided loads all of the trades from all trade sources before attempting to start to price any of them. For a high volume system this could present serious memory problems. Change the implementation of the trade loaders and the system such that it will load a trade and immediately send it to be priced so that the entire trade population does not have to be held in memory. It is acceptable to have all of the results still held in memory for the purposes of this test.
+
+Both feeds now end with a record count and SHA-256 digest. The count includes the column-header row. The digest covers the UTF-8 bytes of each trade row followed by a newline, excluding headers and the trailer. A feed with an invalid trailer must not release any trades for pricing. Preserve the memory goal above.
+
+The trade data directory may contain several files of each feed type. Include them all.
+
+## Exercise 8
+
+Improve pricing throughput on larger feeds by implementing a parallel pricer. Choose your own interface and execution strategy. Preserve the results and their order from the serial implementation, and keep the amount of pending work bounded as the feed grows
+
