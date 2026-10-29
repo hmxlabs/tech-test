@@ -3,12 +3,14 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Iterable
 
-from techtest.loaders.trade_loader import TradeLoader
 from techtest.models import BondTrade, BondTradeList, Trade
 
 
-class BondTradeLoader(TradeLoader):
+class BondTradeLoader:
     _SEPARATOR = ","
+
+    def __init__(self, data_file: str) -> None:
+        self.data_file = data_file
 
     def load_trades(self) -> Iterable[Trade]:
         trade_list = BondTradeList()

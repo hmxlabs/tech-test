@@ -23,7 +23,7 @@ class SerialPricer:
                 pricer = self._pricers[trade.trade_type]
                 pricer.price(trade, result_receiver)
 
-    def _load_pricers(self) -> None:
+    def _load_pricers(self) -> PricingEngine:
         pricing_config_loader = PricingConfigLoader()
         pricing_config_loader.config_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "pricing_config", "PricingEngines.xml")
