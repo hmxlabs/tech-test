@@ -25,19 +25,19 @@ See the [README](./README.md) for how to run the tests and the application. Star
 # Exercises
 
 ## Exercise 1
-Modify the [BondTradeLoader](./techtest/loaders/bond_trade_loader.py) class to correctly process the bond feed file ([BondTrades.dat](./techtest/loaders/trade_data/BondTrades.dat)) such that it now creates the correct objects for both government and corporate bonds. Once this is complete the BondTradeLoaderTests should all pass.
+Modify the [BondTradeLoader](./techtest/loaders/bond_trade_loader.py) class to correctly process the bond feed file ([BondTrades.dat](./techtest/loaders/trade_data/BondTrades.dat)) such that it now creates the correct objects for both government and corporate bonds. Once this is complete the tests in [test_bond_trade_loader.py](./tests/test_bond_trade_loader.py) should all pass.
 
 ## Exercise 2
-Implement the [FxTradeLoader](./techtest/loaders/fx_trade_loader.py) class so that it can read the FX trades feed file([FxTrades.dat](./techtest/loaders/trade_data/FxTrades.dat)). The Instrument field should be constructed as the concatenation of Ccy1 and Ccy2. Once this is implemented the FxTradeLoaderTests should all pass
+Implement the [FxTradeLoader](./techtest/loaders/fx_trade_loader.py) class so that it can read the FX trades feed file([FxTrades.dat](./techtest/loaders/trade_data/FxTrades.dat)). The Instrument field should be constructed as the concatenation of Ccy1 and Ccy2. Once this is implemented the tests in [test_fx_trade_loader.py](./tests/test_fx_trade_loader.py) should all pass
 
 ## Exercise 3
-Implement the [PricingConfigLoader](./techtest/risk_system/pricing_config_loader.py) class such that it loads the contents of the [PricingEngines.xml](./techtest/risk_system/pricing_config/PricingEngines.xml) file and provides an enumeration of PricingEngineConfigItem objects. Once this is implemented the PricingConfigLoaderTests should all pass.
+Implement the [PricingConfigLoader](./techtest/risk_system/pricing_config_loader.py) class such that it loads the contents of the [PricingEngines.xml](./techtest/risk_system/pricing_config/PricingEngines.xml) file and provides an iterable of PricingEngineConfigItem objects. Once this is implemented the tests in [test_pricing_config_loader.py](./tests/test_pricing_config_loader.py) should all pass.
 
 ## Exercise 4
 Implement the `_load_pricers` method in the [SerialPricer](./techtest/risk_system/serial_pricer.py) class so that it instantiates each of the required types of pricing engines dynamically. There should be no import-time dependency between the `risk_system` and `pricers` packages.
 
 ## Exercise 5
-Complete the implementation of the [ScalarResults](./techtest/models/scalar_results.py) class such that it fully supports iteration (`__iter__`), producing one `ScalarResult` per trade. Once this is complete the ScalarResultsTests should all pass.
+Complete the implementation of the [ScalarResults](./techtest/models/scalar_results.py) class such that it fully supports iteration (`__iter__`), producing one `ScalarResult` per trade. Once this is complete the tests in [test_scalar_results.py](./tests/test_scalar_results.py) should all pass.
 
 ## Exercise 6
 Implement the [ScreenResultPrinter](./techtest/risk_system/screen_result_printer.py) class. It should output one line to the screen for each trade in the following formats:
@@ -49,3 +49,6 @@ At this point you should be able to run the application (`python -m techtest.con
 
 ## Exercise 7
 The risk system in its state as provided loads all of the trades from all trade sources before attempting to start to price any of them. For a high volume system this could present serious memory problems. Change the implementation of the trade loaders and the system such that it will load a trade and immediately send it to be priced so that the entire trade population does not have to be held in memory. It is acceptable to have all of the results still held in memory for the purposes of this test.
+
+## Exercise 8
+The system in its current state will serialise the pricing of each trade one at a time. This does not scale well in a system with complex trade types that take a long time to price. Implement the parallel pricer class that will use asyncio to run a number of pricing calculations in parallel. The call to the Price function should still only return once all of the results are available.
