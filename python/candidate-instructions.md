@@ -14,8 +14,6 @@ At the end of the exercise all of the code should run, the unit tests should run
 
 # Rules
 
-This test should take about 2 hours to complete and you should try and limit your time to this. You should allocate your time accordingly and skip any questions you are unable to complete. The questions get progressively more difficult, the first few questions should take only a matter of minutes to complete, the later questions will take longer. Depending on your experience you may not be able to complete all of the questions. This is deliberate and expected.
-
 You may use any resources you wish to complete the test. You may use the internet, books, or any other resources you have available including AI tools. You should not ask for help from any other person. **You will be asked to explain your solution and justify your decisions.**
 
 You should not use any third party libraries or introduce any new dependencies in order to complete the test. You may use any functionality you wish that is provided by the Python standard library.
