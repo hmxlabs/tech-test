@@ -6,7 +6,8 @@
 #include <iomanip>
 #include <chrono>
 
-BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
+// pass line by const ref over value 
+BondTrade* BondTradeLoader::createTradeFromLine(const std::string& line) {
     std::vector<std::string> items;
     std::stringstream ss(line);
     std::string item;
@@ -18,9 +19,22 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
     if (items.size() < 7) {
         throw std::runtime_error("Invalid line format");
     }
+
     
-    BondTrade* trade = new BondTrade(items[6]);
-    
+    const std::string& tradeId = items[6];
+    std::string tradeType;
+    if (tradeId.find("GOV") == 0) {
+        tradeType = BondTrade::GovBondTradeType;
+    } else if (tradeId.find("CORP") == 0) {
+        tradeType = BondTrade::CorpBondTradeType;
+    } else {
+        // fail fast: throw if neither (ideally replace BondTrade.h static members with enum over BondTrade.h trade types if bond trade types scale)
+        throw std::runtime_error("Unknown bond type for TradeID: " + tradeId);
+    }
+
+    // RAII guard (protect against thrown exceptions e.g., std::stod())
+    std::unique_ptr<BondTrade> trade(new BondTrade(tradeId, tradeType));
+
     std::tm tm = {};
     std::istringstream dateStream(items[1]);
     dateStream >> std::get_time(&tm, "%Y-%m-%d");
@@ -32,7 +46,7 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
     trade->setNotional(std::stod(items[4]));
     trade->setRate(std::stod(items[5]));
     
-    return trade;
+    return trade.release();
 }
 
 void BondTradeLoader::loadTradesFromFile(std::string filename, BondTradeList& tradeList) {
