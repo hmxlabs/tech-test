@@ -20,7 +20,7 @@ FxTrade* FxTradeLoader::createTradeFromLine(const std::string& line) {
         end = line.find(separator, start);
     }
     items.push_back(line.substr(start));
-
+    
     if (items.size() < 9) {
         throw std::runtime_error("Invalid line format");
     }
@@ -45,9 +45,16 @@ FxTrade* FxTradeLoader::createTradeFromLine(const std::string& line) {
     trade->setTradeDate(timePoint);
 
     trade->setInstrument(items[2] + items[3]);
-    trade->setCounterparty(items[7]);
     trade->setNotional(std::stod(items[4]));
     trade->setRate(std::stod(items[5]));
+
+    std::tm valueTm = {};
+    std::istringstream valueDateStream(items[6]);
+    valueDateStream >> std::get_time(&valueTm, "%Y-%m-%d");
+    auto valueTimePoint = std::chrono::system_clock::from_time_t(std::mktime(&valueTm));
+    trade->setValueDate(valueTimePoint);
+
+    trade->setCounterparty(items[7]);
 
     return trade.release();
 }
@@ -69,10 +76,11 @@ void FxTradeLoader::loadTradesFromFile(std::string& filename, TradeList& tradeLi
             line.pop_back();
         }
 
-        if (lineCount == 0) {
-        } else {
-            tradeList.add(createTradeFromLine(line));
-        }
+        if (lineCount < 2 || line.find("END") == 0) {
+            lineCount++;
+            continue;
+        } 
+        tradeList.add(createTradeFromLine(line));
         lineCount++;
     }
 }
