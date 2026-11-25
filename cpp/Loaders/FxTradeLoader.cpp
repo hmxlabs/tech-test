@@ -14,3 +14,6 @@ std::string FxTradeLoader::getDataFile() const {
 void FxTradeLoader::setDataFile(const std::string& file) {
     throw std::runtime_error("Not implemented");
 }
+
+
+// The Instrument field should be constructed as the concatenation of Ccy1 and Ccy2

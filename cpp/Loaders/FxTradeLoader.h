@@ -8,6 +8,7 @@
 
 class FxTradeLoader : public ITradeLoader {
 private:
+    static constexpr char separator = '¬';
     std::string dataFile_;
     
 public:

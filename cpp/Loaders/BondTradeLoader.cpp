@@ -20,9 +20,9 @@ BondTrade* BondTradeLoader::createTradeFromLine(const std::string& line) {
         throw std::runtime_error("Invalid line format");
     }
 
-    
     const std::string& tradeId = items[6];
     std::string tradeType;
+    
     if (tradeId.find("GOV") == 0) {
         tradeType = BondTrade::GovBondTradeType;
     } else if (tradeId.find("CORP") == 0) {
