@@ -6,7 +6,7 @@
 #include "../Models/BondTradeList.h"
 #include <string>
 #include <vector>
-#include <memory>
+#include <memory> // not needed?
 
 class BondTradeLoader : public ITradeLoader {
 private:
@@ -14,7 +14,7 @@ private:
     std::string dataFile_;
     
     BondTrade* createTradeFromLine(const std::string& line);
-    void loadTradesFromFile(std::string filename, BondTradeList& tradeList);
+    void loadTradesFromFile(std::string& filename, TradeList& tradeList);
     
 public:
     std::vector<ITrade*> loadTrades() override;

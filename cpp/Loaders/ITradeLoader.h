@@ -2,10 +2,15 @@
 #define ITRADELOADER_H
 
 #include "../Models/ITrade.h"
+#include "../Models/TradeList.h"
 #include <vector>
 #include <string>
 
-class ITradeLoader {
+class ITradeLoader {  
+protected:
+    virtual ITrade* createTradeFromLine(const std::string& line) = 0;
+    virtual void loadTradesFromFile(std::string& filename, TradeList& tradeList) = 0;
+
 public:
     virtual ~ITradeLoader() = default;
     virtual std::vector<ITrade*> loadTrades() = 0;

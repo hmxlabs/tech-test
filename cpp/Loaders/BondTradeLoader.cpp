@@ -49,7 +49,7 @@ BondTrade* BondTradeLoader::createTradeFromLine(const std::string& line) {
     return trade.release();
 }
 
-void BondTradeLoader::loadTradesFromFile(std::string filename, BondTradeList& tradeList) {
+void BondTradeLoader::loadTradesFromFile(std::string& filename, TradeList& tradeList) {
     if (filename.empty()) {
         throw std::invalid_argument("Filename cannot be null");
     }
